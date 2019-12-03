@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs');
+
 const User = require('../models/User');
 
 module.exports.login = function (req, res) {
@@ -18,6 +20,18 @@ module.exports.register = async function (req, res) {
         });
     } else {
         //create User
+        const salt = bcrypt.genSaltSync();
+        const user = new User({
+            email: req.body.email,
+            password: req.body.password
+        });
+        try {
+            await user.save();
+            res.status(201).json(user);
+        } catch (e) {
+            //process error
+
+        }
 
     }
 };
